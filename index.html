@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hit the shuttle!</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Hit The Shuttle! <span class="score">0</span></h1>
+    <br />
+    <h3>Highest Score : User fauzannmw - 32 Point</h3>
+    <!-- <button onClick="startGame()">Start!</button> -->
+    <!-- <button type="button" class="btn btn-warning" onClick="startGame()">Start !</button> -->
+
+    <div>
+      <button
+        type="button"
+        style="
+          margin: auto;
+          display: block;
+          margin-top: 5%;
+          height: 80px;
+          width: 150px;
+        "
+        class="btn btn-outline-dark mb-0"
+        onClick="startGame()"
+      >
+        <p>Start</p>
+      </button>
+    </div>
+    <div class="game">
+      <div class="net net1">
+        <div class="shuttle"></div>
+      </div>
+      <div class="net net2">
+        <div class="shuttle"></div>
+      </div>
+      <div class="net net3">
+        <div class="shuttle"></div>
+      </div>
+      <div class="net net4">
+        <div class="shuttle"></div>
+      </div>
+      <div class="net net5">
+        <div class="shuttle"></div>
+      </div>
+      <div class="net net6">
+        <div class="shuttle"></div>
+      </div>
+    </div>
+
+    <script>
+      const nets = document.querySelectorAll(".net");
+      const scoreBoard = document.querySelector(".score");
+      const shuttles = document.querySelectorAll(".shuttle");
+      let lastnet;
+      let timeUp = false;
+      let score = 0;
+
+      function randomTime(min, max) {
+        return Math.round(Math.random() * (max - min) + min);
+      }
+
+      function randomnet(nets) {
+        const idx = Math.floor(Math.random() * nets.length);
+        const net = nets[idx];
+        if (net === lastnet) {
+          console.log("");
+          return randomnet(nets);
+        }
+        lastnet = net;
+        return net;
+      }
+
+      function peep() {
+        const time = randomTime(500, 1000);
+        const net = randomnet(nets);
+        net.classList.add("up");
+        setTimeout(() => {
+          net.classList.remove("up");
+          if (!timeUp) peep();
+        }, time);
+      }
+
+      function startGame() {
+        scoreBoard.textContent = 0;
+        timeUp = false;
+        score = 0;
+        peep();
+        setTimeout(() => (timeUp = true), 15000);
+      }
+
+      function pukul(e) {
+        if (!e.isTrusted) return;
+        score++;
+        this.parentNode.classList.remove("up");
+        scoreBoard.textContent = score;
+      }
+
+      shuttles.forEach((shuttle) => shuttle.addEventListener("click", pukul));
+    </script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
